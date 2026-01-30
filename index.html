@@ -1,0 +1,1941 @@
+
+html_content = '''<!DOCTYPE html>
+<html lang="kk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#722F37">
+    <title>NARXOZ College - Smart Journal</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #722F37;
+            --primary-dark: #5a252c;
+            --primary-light: #8B3A44;
+            --accent: #D4AF37;
+            --bg: #F8F9FA;
+            --card-bg: #FFFFFF;
+            --text: #1A1A1A;
+            --text-secondary: #6B7280;
+            --border: #E5E7EB;
+            --success: #10B981;
+            --warning: #F59E0B;
+            --danger: #EF4444;
+            --info: #3B82F6;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+            font-family: 'Inter', sans-serif;
+        }
+
+        html, body {
+            height: 100%;
+            overflow: hidden;
+            background: var(--bg);
+            color: var(--text);
+        }
+
+        .mobile-container {
+            max-width: 480px;
+            margin: 0 auto;
+            height: 100vh;
+            background: var(--bg);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 40px rgba(0,0,0,0.1);
+        }
+
+        /* Splash Screen */
+        .splash-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease;
+        }
+
+        .splash-logo {
+            width: 120px;
+            height: 120px;
+            background: var(--accent);
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            color: var(--primary-dark);
+            font-weight: 800;
+            margin-bottom: 24px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .splash-text {
+            color: white;
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: 2px;
+        }
+
+        .splash-subtext {
+            color: rgba(255,255,255,0.8);
+            margin-top: 8px;
+            font-size: 14px;
+        }
+
+        /* Auth Screens */
+        .auth-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: white;
+            z-index: 100;
+            display: none;
+            flex-direction: column;
+            padding: 40px 24px;
+            overflow-y: auto;
+        }
+
+        .auth-screen.active {
+            display: flex;
+        }
+
+        .auth-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .auth-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            border-radius: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            color: white;
+            font-size: 32px;
+            box-shadow: 0 10px 30px rgba(114, 47, 55, 0.3);
+        }
+
+        .auth-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 8px;
+        }
+
+        .auth-subtitle {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            color: var(--text);
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 16px;
+            border: 2px solid var(--border);
+            border-radius: 16px;
+            font-size: 16px;
+            transition: all 0.3s;
+            background: var(--bg);
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: white;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 16px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(114, 47, 55, 0.4);
+        }
+
+        .btn-primary:active {
+            transform: scale(0.98);
+        }
+
+        .btn-secondary {
+            background: var(--bg);
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        .user-list {
+            margin-top: 20px;
+            background: var(--bg);
+            border-radius: 16px;
+            padding: 16px;
+        }
+
+        .user-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            background: white;
+            border-radius: 12px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 2px solid transparent;
+        }
+
+        .user-item:hover {
+            border-color: var(--primary);
+            transform: translateX(4px);
+        }
+
+        .user-avatar-small {
+            width: 40px;
+            height: 40px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+        }
+
+        .user-info-small {
+            flex: 1;
+        }
+
+        .user-name-small {
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .user-role-small {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .code-inputs {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin: 30px 0;
+        }
+
+        .code-input {
+            width: 56px;
+            height: 64px;
+            border: 2px solid var(--border);
+            border-radius: 16px;
+            text-align: center;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary);
+            transition: all 0.3s;
+        }
+
+        .code-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: rgba(114, 47, 55, 0.05);
+            transform: scale(1.1);
+        }
+
+        /* Main App */
+        .main-app {
+            display: none;
+            height: 100%;
+            flex-direction: column;
+            overflow-y: auto;
+            scroll-behavior: smooth;
+        }
+
+        .main-app.active {
+            display: flex;
+        }
+
+        /* Content Sections */
+        .content-section {
+            display: none;
+            padding-bottom: 100px;
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .content-section.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Global Header (only icons, no GPA here) */
+        .global-header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 16px 20px;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-title {
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .icon-btn {
+            width: 40px;
+            height: 40px;
+            background: rgba(255,255,255,0.2);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            position: relative;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s;
+        }
+
+        .icon-btn:active {
+            transform: scale(0.9);
+        }
+
+        .badge {
+            position: absolute;
+            top: -2px;
+            right: -2px;
+            width: 18px;
+            height: 18px;
+            background: var(--accent);
+            color: var(--primary-dark);
+            border-radius: 50%;
+            font-size: 10px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid var(--primary);
+        }
+
+        .badge.hidden {
+            display: none;
+        }
+
+        /* Home Specific Header with GPA */
+        .home-header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 0 0 30px 30px;
+            margin-bottom: 20px;
+        }
+
+        .user-greeting {
+            margin-bottom: 20px;
+        }
+
+        .greeting-text {
+            font-size: 14px;
+            opacity: 0.9;
+            margin-bottom: 4px;
+        }
+
+        .user-name {
+            font-size: 22px;
+            font-weight: 700;
+        }
+
+        .user-role-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(255,255,255,0.2);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            margin-top: 8px;
+            font-weight: 600;
+        }
+
+        .quick-stats {
+            display: flex;
+            gap: 12px;
+            overflow-x: auto;
+            scrollbar-width: none;
+        }
+
+        .quick-stats::-webkit-scrollbar {
+            display: none;
+        }
+
+        .stat-chip {
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(10px);
+            padding: 12px 16px;
+            border-radius: 16px;
+            min-width: 120px;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .stat-chip-label {
+            font-size: 11px;
+            opacity: 0.8;
+            margin-bottom: 4px;
+        }
+
+        .stat-chip-value {
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            padding: 0 20px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .see-all {
+            color: var(--primary);
+            font-size: 14px;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 20px;
+            margin: 0 20px 16px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+            border: 1px solid var(--border);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .card-title {
+            font-weight: 700;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .card-icon {
+            width: 36px;
+            height: 36px;
+            background: rgba(114, 47, 55, 0.1);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+        }
+
+        /* Teacher Actions */
+        .teacher-actions {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin: 0 20px 20px;
+        }
+
+        .action-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 20px;
+            text-align: center;
+            border: 2px solid var(--border);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .action-card:active {
+            transform: scale(0.95);
+            border-color: var(--primary);
+        }
+
+        .action-icon {
+            width: 48px;
+            height: 48px;
+            background: rgba(114, 47, 55, 0.1);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 12px;
+            color: var(--primary);
+            font-size: 20px;
+        }
+
+        .action-title {
+            font-weight: 700;
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+
+        .action-desc {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        /* Schedule */
+        .schedule-item {
+            display: flex;
+            gap: 16px;
+            padding: 16px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .schedule-item:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .time-column {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 50px;
+        }
+
+        .time-start {
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 14px;
+        }
+
+        .time-end {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-top: 4px;
+        }
+
+        .time-line {
+            flex: 1;
+            width: 2px;
+            background: var(--border);
+            margin: 8px 0;
+        }
+
+        .schedule-content {
+            flex: 1;
+            background: var(--bg);
+            padding: 16px;
+            border-radius: 16px;
+            border-left: 4px solid var(--primary);
+            position: relative;
+        }
+
+        .subject-name {
+            font-weight: 700;
+            font-size: 15px;
+            margin-bottom: 6px;
+        }
+
+        .subject-room {
+            font-size: 13px;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 8px;
+        }
+
+        .edit-btn {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            width: 32px;
+            height: 32px;
+            border: none;
+            background: white;
+            border-radius: 8px;
+            color: var(--primary);
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .subject-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .status-current {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+        }
+
+        /* Grade Entry for Teachers */
+        .grade-entry-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .grade-entry-table th,
+        .grade-entry-table td {
+            padding: 12px 8px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+            font-size: 13px;
+        }
+
+        .grade-entry-table th {
+            font-weight: 600;
+            color: var(--primary);
+            font-size: 11px;
+            text-transform: uppercase;
+        }
+
+        .grade-input-small {
+            width: 50px;
+            padding: 8px;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .grade-input-small:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .total-grade {
+            font-weight: 800;
+            color: var(--primary);
+            font-size: 16px;
+        }
+
+        /* Attendance */
+        .attendance-list {
+            margin-top: 16px;
+        }
+
+        .attendance-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px;
+            background: var(--bg);
+            border-radius: 12px;
+            margin-bottom: 8px;
+        }
+
+        .attendance-name {
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .attendance-group {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .attendance-toggle {
+            display: flex;
+            gap: 8px;
+        }
+
+        .toggle-btn {
+            padding: 8px 16px;
+            border: 2px solid var(--border);
+            background: white;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .toggle-btn.active.present {
+            background: var(--success);
+            color: white;
+            border-color: var(--success);
+        }
+
+        .toggle-btn.active.absent {
+            background: var(--danger);
+            color: white;
+            border-color: var(--danger);
+        }
+
+        /* Notifications */
+        .notification-item {
+            display: flex;
+            gap: 12px;
+            padding: 16px;
+            background: var(--card-bg);
+            border-radius: 16px;
+            margin: 0 20px 12px;
+            border: 1px solid var(--border);
+            position: relative;
+            transition: all 0.3s;
+        }
+
+        .notification-item.unread {
+            background: rgba(114, 47, 55, 0.03);
+            border-left: 4px solid var(--primary);
+        }
+
+        .notification-item.read {
+            opacity: 0.7;
+        }
+
+        .notification-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .notification-icon.grade { background: rgba(16, 185, 129, 0.1); color: var(--success); }
+        .notification-icon.schedule { background: rgba(59, 130, 246, 0.1); color: var(--info); }
+        .notification-icon.alert { background: rgba(245, 158, 11, 0.1); color: var(--warning); }
+
+        .notification-content {
+            flex: 1;
+        }
+
+        .notification-title {
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+
+        .notification-text {
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.4;
+        }
+
+        .notification-time {
+            font-size: 11px;
+            color: var(--text-secondary);
+            margin-top: 6px;
+        }
+
+        .notification-delete {
+            position: absolute;
+            top: 50%;
+            right: 16px;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .notification-item:hover .notification-delete {
+            opacity: 1;
+        }
+
+        /* Profile */
+        .profile-header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            margin: -20px -20px 20px;
+            padding: 30px 20px;
+            color: white;
+            text-align: center;
+        }
+
+        .profile-avatar {
+            width: 100px;
+            height: 100px;
+            background: white;
+            border-radius: 50%;
+            margin: 0 auto 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            color: var(--primary);
+            border: 4px solid rgba(255,255,255,0.3);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .profile-name {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .profile-role {
+            font-size: 14px;
+            opacity: 0.9;
+            margin-bottom: 16px;
+        }
+
+        .profile-stats {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 20px;
+        }
+
+        .profile-stat {
+            text-align: center;
+        }
+
+        .profile-stat-value {
+            font-size: 24px;
+            font-weight: 800;
+            margin-bottom: 4px;
+        }
+
+        .profile-stat-label {
+            font-size: 12px;
+            opacity: 0.8;
+        }
+
+        .menu-list {
+            background: var(--card-bg);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+            border: 1px solid var(--border);
+            margin-bottom: 20px;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 18px 20px;
+            border-bottom: 1px solid var(--border);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .menu-item:last-child {
+            border-bottom: none;
+        }
+
+        .menu-item:active {
+            background: var(--bg);
+        }
+
+        .menu-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            background: rgba(114, 47, 55, 0.1);
+            color: var(--primary);
+        }
+
+        .menu-text {
+            flex: 1;
+            font-weight: 600;
+        }
+
+        .menu-arrow {
+            color: var(--text-secondary);
+        }
+
+        /* Bottom Nav */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 480px;
+            background: white;
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: space-around;
+            padding: 8px 0 24px;
+            z-index: 100;
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.05);
+        }
+
+        .nav-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            padding: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+            background: none;
+            color: var(--text-secondary);
+        }
+
+        .nav-item.active {
+            color: var(--primary);
+        }
+
+        .nav-item.active .nav-icon {
+            background: rgba(114, 47, 55, 0.1);
+            transform: translateY(-4px);
+        }
+
+        .nav-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            transition: all 0.3s;
+        }
+
+        .nav-label {
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 200;
+            align-items: flex-end;
+            justify-content: center;
+            backdrop-filter: blur(4px);
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            width: 100%;
+            max-width: 480px;
+            border-radius: 30px 30px 0 0;
+            padding: 24px;
+            max-height: 85vh;
+            overflow-y: auto;
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(100%); }
+            to { transform: translateY(0); }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-title {
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .close-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: none;
+            background: var(--bg);
+            color: var(--text);
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .form-select, .form-input {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            font-size: 15px;
+            background: white;
+        }
+
+        .form-select:focus, .form-input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-secondary);
+        }
+
+        .empty-state i {
+            font-size: 48px;
+            margin-bottom: 16px;
+            color: var(--border);
+        }
+    </style>
+</head>
+<body>
+    <div class="splash-screen" id="splash">
+        <div class="splash-logo">N</div>
+        <div class="splash-text">NARXOZ</div>
+        <div class="splash-subtext">Smart Journal</div>
+    </div>
+
+    <div class="mobile-container">
+        <!-- Auth Screen -->
+        <div class="auth-screen active" id="authScreen">
+            <div class="auth-header">
+                <div class="auth-icon">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <div class="auth-title">Жүйеге кіру</div>
+                <div class="auth-subtitle">Корпоративті аккаунтыңызды таңдаңыз</div>
+            </div>
+
+            <div class="user-list" id="userList">
+                <!-- Generated by JS -->
+            </div>
+
+            <div style="margin-top: 30px; text-align: center; color: var(--text-secondary); font-size: 12px;">
+                Қауіпсіз кіру жүйесі • v2.0
+            </div>
+        </div>
+
+        <!-- Code Verification -->
+        <div class="auth-screen" id="codeScreen">
+            <div class="auth-header">
+                <div class="auth-icon">
+                    <i class="fas fa-lock"></i>
+                </div>
+                <div class="auth-title">Құпия сөзді енгізіңіз</div>
+                <div class="auth-subtitle" id="codeUserName">Азамат Әлім</div>
+            </div>
+
+            <div class="code-inputs">
+                <input type="password" class="code-input" maxlength="1" onkeyup="moveToNext(this, 0)">
+                <input type="password" class="code-input" maxlength="1" onkeyup="moveToNext(this, 1)">
+                <input type="password" class="code-input" maxlength="1" onkeyup="moveToNext(this, 2)">
+                <input type="password" class="code-input" maxlength="1" onkeyup="moveToNext(this, 3)">
+            </div>
+
+            <button class="btn btn-primary" onclick="verifyCode()">
+                <i class="fas fa-unlock"></i>
+                Кіру
+            </button>
+
+            <button class="btn btn-secondary" style="margin-top: 12px;" onclick="backToUsers()">
+                <i class="fas fa-arrow-left"></i>
+                Артқа
+            </button>
+
+            <div style="margin-top: 24px; text-align: center; font-size: 13px; color: var(--text-secondary);">
+                Құпия сөзді ұмыттыңыз ба? <span style="color: var(--primary); font-weight: 600; cursor: pointer;">Қайта орнату</span>
+            </div>
+        </div>
+
+        <!-- Main App -->
+        <div class="main-app" id="mainApp">
+            <!-- Global Header (no GPA here) -->
+            <div class="global-header" id="globalHeader">
+                <div class="header-title" id="pageTitle">Басты бет</div>
+                <div class="header-actions">
+                    <button class="icon-btn" onclick="goToNotifications()">
+                        <i class="fas fa-bell"></i>
+                        <span class="badge" id="notifBadge">3</span>
+                    </button>
+                    <button class="icon-btn" onclick="goToProfile()">
+                        <i class="fas fa-user"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- HOME SECTION -->
+            <div class="content-section active" id="homeSection">
+                <div class="home-header">
+                    <div class="user-greeting">
+                        <div class="greeting-text">Қош келдіңіз,</div>
+                        <div class="user-name" id="homeUserName">Азамат Әлім</div>
+                        <div class="user-role-badge" id="userRoleBadge">
+                            <i class="fas fa-graduation-cap"></i>
+                            <span id="roleText">Студент</span>
+                        </div>
+                    </div>
+                    <div class="quick-stats">
+                        <div class="stat-chip">
+                            <div class="stat-chip-label">GPA</div>
+                            <div class="stat-chip-value" id="homeGPA">3.85</div>
+                        </div>
+                        <div class="stat-chip">
+                            <div class="stat-chip-label">Қарзы</div>
+                            <div class="stat-chip-value" id="homeDebt">0 ₸</div>
+                        </div>
+                        <div class="stat-chip">
+                            <div class="stat-chip-label">Қатысу</div>
+                            <div class="stat-chip-value" id="homeAttendance">96%</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Teacher Actions (only for teachers) -->
+                <div id="teacherActions" style="display: none;">
+                    <div class="section-header">
+                        <div class="section-title">Оқытушы менюі</div>
+                    </div>
+                    <div class="teacher-actions">
+                        <div class="action-card" onclick="openGradeEntry()">
+                            <div class="action-icon">
+                                <i class="fas fa-edit"></i>
+                            </div>
+                            <div class="action-title">Баға қою</div>
+                            <div class="action-desc">Журнал толтыру</div>
+                        </div>
+                        <div class="action-card" onclick="openAttendance()">
+                            <div class="action-icon">
+                                <i class="fas fa-clipboard-check"></i>
+                            </div>
+                            <div class="action-title">Қатысу</div>
+                            <div class="action-desc">Бар/Жоқ белгілеу</div>
+                        </div>
+                        <div class="action-card" onclick="openScheduleEdit()">
+                            <div class="action-icon">
+                                <i class="fas fa-calendar-plus"></i>
+                            </div>
+                            <div class="action-title">Кесте</div>
+                            <div class="action-desc">Сабақ қосу</div>
+                        </div>
+                        <div class="action-card" onclick="showStats()">
+                            <div class="action-icon">
+                                <i class="fas fa-chart-pie"></i>
+                            </div>
+                            <div class="action-title">Аналитика</div>
+                            <div class="action-desc">Топ статистикасы</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Student Content -->
+                <div id="studentContent">
+                    <div class="section-header">
+                        <div class="section-title">Бүгінгі сабақтар</div>
+                        <span class="see-all" onclick="switchTab('schedule')">Толық</span>
+                    </div>
+
+                    <div class="card">
+                        <div class="schedule-item">
+                            <div class="time-column">
+                                <div class="time-start">09:00</div>
+                                <div class="time-line"></div>
+                                <div class="time-end">10:30</div>
+                            </div>
+                            <div class="schedule-content">
+                                <div class="subject-name">Web-программалау</div>
+                                <div class="subject-room">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    305 каб., А корпус
+                                </div>
+                                <span class="subject-status status-current">
+                                    <i class="fas fa-play-circle"></i>
+                                    Қазір
+                                </span>
+                            </div>
+                        </div>
+                        <div class="schedule-item">
+                            <div class="time-column">
+                                <div class="time-start">10:45</div>
+                                <div class="time-line"></div>
+                                <div class="time-end">12:15</div>
+                            </div>
+                            <div class="schedule-content">
+                                <div class="subject-name">Мәліметтер базасы</div>
+                                <div class="subject-room">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    412 каб., B корпус
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="section-header" style="margin-top: 24px;">
+                        <div class="section-title">Жақын арадағы</div>
+                    </div>
+
+                    <div class="card" style="border-left: 4px solid var(--danger);">
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <div style="background: rgba(239, 68, 68, 0.1); color: var(--danger); padding: 12px; border-radius: 12px; font-weight: 700;">
+                                15<br><small style="font-size: 10px;">ҚАҢ</small>
+                            </div>
+                            <div>
+                                <div style="font-weight: 700;">React жобасын тапсыру</div>
+                                <div style="font-size: 13px; color: var(--text-secondary);">Web-программалау</div>
+                            </div>
+                            <div style="margin-left: auto; background: var(--danger); color: white; padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 700;">
+                                2 күн
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SCHEDULE SECTION -->
+            <div class="content-section" id="scheduleSection">
+                <div style="padding: 20px;">
+                    <div style="display: flex; gap: 8px; overflow-x: auto; margin-bottom: 20px; scrollbar-width: none;">
+                        <div style="min-width: 60px; padding: 12px; background: var(--primary); color: white; border-radius: 16px; text-align: center;">
+                            <div style="font-size: 12px;">Дс</div>
+                            <div style="font-weight: 700;">13</div>
+                        </div>
+                        <div style="min-width: 60px; padding: 12px; background: white; border: 2px solid var(--border); border-radius: 16px; text-align: center;">
+                            <div style="font-size: 12px;">Сс</div>
+                            <div style="font-weight: 700;">14</div>
+                        </div>
+                        <div style="min-width: 60px; padding: 12px; background: white; border: 2px solid var(--border); border-radius: 16px; text-align: center;">
+                            <div style="font-size: 12px;">Ср</div>
+                            <div style="font-weight: 700;">15</div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title">
+                                <div class="card-icon"><i class="fas fa-calendar-day"></i></div>
+                                Дүйсенбі, 13 қаңтар
+                            </div>
+                            <button class="edit-btn" id="scheduleEditBtn" style="display: none;" onclick="openScheduleEdit()">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
+                        <div id="scheduleList">
+                            <!-- Filled by JS -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- GRADES SECTION -->
+            <div class="content-section" id="gradesSection">
+                <div style="padding: 20px;">
+                    <div style="display: flex; gap: 12px; margin-bottom: 20px;">
+                        <select class="form-select" id="gradeGroupSelect" onchange="loadGrades()">
+                            <option>IT-231</option>
+                            <option>IT-232</option>
+                        </select>
+                        <select class="form-select" id="gradeSubjectSelect" onchange="loadGrades()">
+                            <option>Web-программалау</option>
+                            <option>Мәліметтер базасы</option>
+                        </select>
+                    </div>
+
+                    <div class="card" id="gradeEntryCard" style="display: none;">
+                        <div class="card-header">
+                            <div class="card-title">Баға қою</div>
+                            <button class="btn btn-success" style="width: auto; padding: 8px 16px; font-size: 13px;" onclick="saveGrades()">
+                                <i class="fas fa-save"></i> Сақтау
+                            </button>
+                        </div>
+                        <div style="overflow-x: auto;">
+                            <table class="grade-entry-table">
+                                <thead>
+                                    <tr>
+                                        <th>Студент</th>
+                                        <th>Сабақ<br>(30)</th>
+                                        <th>СӨЖ<br>(20)</th>
+                                        <th>АБ<br>(20)</th>
+                                        <th>Қорыт.<br>(30)</th>
+                                        <th>Барлығы</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="gradeTableBody">
+                                    <!-- Generated by JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div id="studentGradesView">
+                        <div class="card" style="background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%); color: white;">
+                            <div style="text-align: center; padding: 20px;">
+                                <div style="font-size: 14px; opacity: 0.9;">Ағымдық GPA</div>
+                                <div style="font-size: 48px; font-weight: 800; margin: 8px 0;">3.85</div>
+                                <div style="font-size: 14px; opacity: 0.9;">Тамаша! 🎉</div>
+                            </div>
+                        </div>
+
+                        <div class="card" style="margin-top: 16px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                                <div>
+                                    <div style="font-weight: 700;">Web-программалау</div>
+                                    <div style="font-size: 13px; color: var(--text-secondary);">Ахметов С.Б.</div>
+                                </div>
+                                <div style="text-align: right;">
+                                    <div style="font-size: 28px; font-weight: 800; color: var(--success);">95</div>
+                                    <div style="font-size: 12px; color: var(--text-secondary);">А (өте жақсы)</div>
+                                </div>
+                            </div>
+                            <div style="display: flex; gap: 8px;">
+                                <span style="background: var(--bg); padding: 6px 10px; border-radius: 8px; font-size: 12px;">Сабақ: 28/30</span>
+                                <span style="background: var(--bg); padding: 6px 10px; border-radius: 8px; font-size: 12px;">СӨЖ: 19/20</span>
+                                <span style="background: var(--bg); padding: 6px 10px; border-radius: 8px; font-size: 12px;">АБ: 19/20</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PROFILE SECTION -->
+            <div class="content-section" id="profileSection">
+                <div class="profile-header">
+                    <div class="profile-avatar" id="profileAvatar">АӘ</div>
+                    <div class="profile-name" id="profileName">Азамат Әлім</div>
+                    <div class="profile-role" id="profileRole">Студент • IT-231</div>
+                    
+                    <div class="profile-stats">
+                        <div class="profile-stat">
+                            <div class="profile-stat-value" id="profileGPA">3.85</div>
+                            <div class="profile-stat-label">GPA</div>
+                        </div>
+                        <div class="profile-stat">
+                            <div class="profile-stat-value" id="profileDebt">0</div>
+                            <div class="profile-stat-label">Қарзы (₸)</div>
+                        </div>
+                        <div class="profile-stat">
+                            <div class="profile-stat-value" id="profileAttendance">96%</div>
+                            <div class="profile-stat-label">Қатысу</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="padding: 0 20px 100px;">
+                    <div class="menu-list">
+                        <div class="menu-item" onclick="showModal('Жеке ақпарат', 'Аты-жөні: Азамат Әлім\\nТобы: IT-231\\nМамандығы: Software Engineering\\nКурсы: 2')">
+                            <div class="menu-icon"><i class="fas fa-id-card"></i></div>
+                            <div class="menu-text">Жеке ақпарат</div>
+                            <i class="fas fa-chevron-right menu-arrow"></i>
+                        </div>
+                        <div class="menu-item" onclick="showModal('Баптаулар', 'Құпия сөзді өзгерту\\nТілді таңдау\\nХабарландырулар')">
+                            <div class="menu-icon"><i class="fas fa-cog"></i></div>
+                            <div class="menu-text">Баптаулар</div>
+                            <i class="fas fa-chevron-right menu-arrow"></i>
+                        </div>
+                        <div class="menu-item" onclick="showModal"('Көмек'))">
+                            <div class="menu-icon"><i class="fas fa-question-circle"></i></div>
+                            <div class="menu-text">Көмек</div>
+                            <i class="fas fa-chevron-right menu-arrow"></i>
+                        </div>
+                    </div>
+
+                    <div class="menu-list" style="margin-top: 20px;">
+                        <div class="menu-item" style="color: var(--danger);" onclick="logout()">
+                            <div class="menu-icon" style="background: rgba(239, 68, 68, 0.1); color: var(--danger);">
+                                <i class="fas fa-sign-out-alt"></i>
+                            </div>
+                            <div class="menu-text">Жүйеден шығу</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- NOTIFICATIONS SECTION -->
+            <div class="content-section" id="notificationsSection">
+                <div style="padding: 20px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                        <div class="section-title">Хабарландырулар</div>
+                        <span style="color: var(--primary); font-size: 13px; font-weight: 600; cursor: pointer;" onclick="markAllAsRead()">
+                            Барлығын оқылды деп белгілеу
+                        </span>
+                    </div>
+                    <div id="notificationsList">
+                        <!-- Generated by JS -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- ATTENDANCE SECTION (Teacher only) -->
+            <div class="content-section" id="attendanceSection">
+                <div style="padding: 20px;">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title">Қатысу журналы</div>
+                            <div style="font-size: 13px; color: var(--text-secondary);">Бүгін: 13.01.2025</div>
+                        </div>
+                        
+                        <div style="margin-bottom: 16px;">
+                            <select class="form-select" id="attendanceGroup">
+                                <option>IT-231 - Web-программалау</option>
+                                <option>IT-232 - Web-программалау</option>
+                            </select>
+                        </div>
+
+                        <div class="attendance-list" id="attendanceList">
+                            <!-- Generated by JS -->
+                        </div>
+
+                        <button class="btn btn-primary" style="margin-top: 20px;" onclick="saveAttendance()">
+                            <i class="fas fa-save"></i>
+                            Сақтау
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Nav -->
+            <div class="bottom-nav">
+                <button class="nav-item active" onclick="switchTab('home')">
+                    <div class="nav-icon"><i class="fas fa-home"></i></div>
+                    <span class="nav-label">Басты</span>
+                </button>
+                <button class="nav-item" onclick="switchTab('schedule')">
+                    <div class="nav-icon"><i class="fas fa-calendar-alt"></i></div>
+                    <span class="nav-label">Кесте</span>
+                </button>
+                <button class="nav-item" onclick="switchTab('grades')">
+                    <div class="nav-icon"><i class="fas fa-star"></i></div>
+                    <span class="nav-label">Бағалар</span>
+                </button>
+                <button class="nav-item" onclick="switchTab('profile')">
+                    <div class="nav-icon"><i class="fas fa-user"></i></div>
+                    <span class="nav-label">Профиль</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal" id="modal" onclick="closeModal(event)">
+            <div class="modal-content" onclick="event.stopPropagation()">
+                <div class="modal-header">
+                    <div class="modal-title" id="modalTitle">Title</div>
+                    <button class="close-btn" onclick="closeModal()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div id="modalBody" style="line-height: 1.6; color: var(--text-secondary);">
+                    Content
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Mock Database
+        const users = [
+            { email: 'student@narxoz.kz', password: '1111', name: 'Азамат Әлім', role: 'student', group: 'IT-231', gpa: '3.85', debt: '0', attendance: '96%', avatar: 'АӘ' },
+            { email: 'teacher@narxoz.kz', password: '2222', name: 'Сарсенбаева Айгүл', role: 'teacher', group: 'IT-231, IT-232', gpa: '-', debt: '-', attendance: '-', avatar: 'СА' },
+            { email: 'curator@narxoz.kz', password: '3333', name: 'Нұрланов Бауыржан', role: 'curator', group: 'IT-231', gpa: '-', debt: '-', attendance: '-', avatar: 'НБ' },
+            { email: 'admin@narxoz.kz', password: '4444', name: 'Администратор', role: 'admin', group: 'Барлық топтар', gpa: '-', debt: '-', attendance: '-', avatar: 'АД' }
+        ];
+
+        const students = [
+            { id: 1, name: 'Азамат Әлім', group: 'IT-231', attendance: 28, szh: 19, ab: 19, final: 28 },
+            { id: 2, name: 'Дина Сарсенова', group: 'IT-231', attendance: 30, szh: 20, ab: 20, final: 30 },
+            { id: 3, name: 'Болат Нұрланов', group: 'IT-231', attendance: 25, szh: 15, ab: 17, final: 24 },
+            { id: 4, name: 'Айгүл Серікова', group: 'IT-232', attendance: 29, szh: 19, ab: 18, final: 27 }
+        ];
+
+        let notifications = [
+            { id: 1, type: 'grade', title: 'Жаңа баға қойылды', text: 'Web-программалау пәнінен СӨЖ бағасы: 19/20', time: 'Бүгін, 10:30', read: false },
+            { id: 2, type: 'schedule', title: 'Сабақ уақыты өзгерді', text: 'Ертеңгі Мәліметтер базасы сабақ 10:00-дан 12:00-ға аустырылды', time: 'Кеше, 16:45', read: false },
+            { id: 3, type: 'alert', title: 'Мерзім жақындап қалды', text: 'React жобасын тапсыруға 2 күн қалды', time: 'Кеше, 09:00', read: false },
+            { id: 4, type: 'grade', title: 'Қорытынды баға', text: 'Ағылшын тілінен қорытынды баға: 92 (A)', time: '3 күн бұрын', read: true }
+        ];
+
+        let currentUser = null;
+        let selectedUser = null;
+
+        // Initialize
+        window.onload = function() {
+            setTimeout(() => {
+                document.getElementById('splash').style.opacity = '0';
+                setTimeout(() => {
+                    document.getElementById('splash').style.display = 'none';
+                    checkLogin();
+                }, 500);
+            }, 2000);
+
+            renderUserList();
+            updateNotificationBadge();
+        };
+
+        function checkLogin() {
+            const saved = localStorage.getItem('narxoz_current_user');
+            if (saved) {
+                currentUser = JSON.parse(saved);
+                showMainApp();
+            } else {
+                document.getElementById('authScreen').classList.add('active');
+            }
+        }
+
+        function renderUserList() {
+            const container = document.getElementById('userList');
+            container.innerHTML = users.map(user => `
+                <div class="user-item" onclick="selectUser('${user.email}')">
+                    <div class="user-avatar-small">${user.avatar}</div>
+                    <div class="user-info-small">
+                        <div class="user-name-small">${user.name}</div>
+                        <div class="user-role-small">${user.email} • ${user.role === 'student' ? 'Студент' : user.role === 'teacher' ? 'Оқытушы' : user.role === 'curator' ? 'Куратор' : 'Админ'}</div>
+                    </div>
+                    <i class="fas fa-chevron-right" style="color: var(--text-secondary);"></i>
+                </div>
+            `).join('');
+        }
+
+        function selectUser(email) {
+            selectedUser = users.find(u => u.email === email);
+            if (selectedUser) {
+                document.getElementById('codeUserName').textContent = selectedUser.name;
+                document.getElementById('authScreen').classList.remove('active');
+                document.getElementById('codeScreen').classList.add('active');
+                document.querySelectorAll('.code-input')[0].focus();
+            }
+        }
+
+        function backToUsers() {
+            document.getElementById('codeScreen').classList.remove('active');
+            document.getElementById('authScreen').classList.add('active');
+            document.querySelectorAll('.code-input').forEach(input => input.value = '');
+        }
+
+        function moveToNext(input, index) {
+            if (input.value.length === 1) {
+                const inputs = document.querySelectorAll('.code-input');
+                if (index < inputs.length - 1) {
+                    inputs[index + 1].focus();
+                }
+            }
+        }
+
+        function verifyCode() {
+            const inputs = document.querySelectorAll('.code-input');
+            const code = Array.from(inputs).map(i => i.value).join('');
+            
+            if (code === selectedUser.password) {
+                currentUser = selectedUser;
+                localStorage.setItem('narxoz_current_user', JSON.stringify(currentUser));
+                document.getElementById('codeScreen').classList.remove('active');
+                showMainApp();
+            } else {
+                alert('Қате код! Сын-+ы: ' + selectedUser.password);
+            }
+        }
+
+        function showMainApp() {
+            document.getElementById('mainApp').classList.add('active');
+            updateUIForRole();
+            renderNotifications();
+            loadGrades();
+            renderSchedule();
+            if (currentUser.role === 'teacher' || currentUser.role === 'curator') {
+                renderAttendance();
+            }
+        }
+
+        function updateUIForRole() {
+            const isTeacher = currentUser.role === 'teacher' || currentUser.role === 'curator' || currentUser.role === 'admin';
+            const isStudent = currentUser.role === 'student';
+
+            // Update Home Header
+            document.getElementById('homeUserName').textContent = currentUser.name;
+            document.getElementById('userRoleBadge').style.display = 'flex';
+            document.getElementById('roleText').textContent = 
+                currentUser.role === 'student' ? 'Студент' : 
+                currentUser.role === 'teacher' ? 'Оқытушы' : 
+                currentUser.role === 'curator' ? 'Куратор' : 'Админ';
+            
+            document.getElementById('homeGPA').textContent = currentUser.gpa;
+            document.getElementById('homeDebt').textContent = currentUser.debt === '0' ? '0 ₸' : currentUser.debt + ' ₸';
+            document.getElementById('homeAttendance').textContent = currentUser.attendance;
+
+            // Profile
+            document.getElementById('profileName').textContent = currentUser.name;
+            document.getElementById('profileRole').textContent = 
+                (currentUser.role === 'student' ? 'Студент' : 
+                 currentUser.role === 'teacher' ? 'Оқытушы' : 
+                 currentUser.role === 'curator' ? 'Куратор' : 'Админ') + ' • ' + currentUser.group;
+            document.getElementById('profileAvatar').textContent = currentUser.avatar;
+            document.getElementById('profileGPA').textContent = currentUser.gpa;
+            document.getElementById('profileDebt').textContent = currentUser.debt;
+            document.getElementById('profileAttendance').textContent = currentUser.attendance;
+
+            // Show/Hide Teacher Actions
+            document.getElementById('teacherActions').style.display = isTeacher ? 'grid' : 'none';
+            document.getElementById('studentContent').style.display = isStudent ? 'block' : 'none';
+
+            // Show/Hide Grade Entry
+            document.getElementById('gradeEntryCard').style.display = isTeacher ? 'block' : 'none';
+            document.getElementById('studentGradesView').style.display = isStudent ? 'block' : 'none';
+
+            // Schedule Edit Button
+            document.getElementById('scheduleEditBtn').style.display = isTeacher ? 'flex' : 'none';
+
+            // If teacher, remove GPA/Debt from header (only global header remains with icons)
+            if (isTeacher) {
+                document.querySelector('.quick-stats').innerHTML = `
+                    <div class="stat-chip">
+                        <div class="stat-chip-label">Топтар</div>
+                        <div class="stat-chip-value">2</div>
+                    </div>
+                    <div class="stat-chip">
+                        <div class="stat-chip-label">Студенттер</div>
+                        <div class="stat-chip-value">48</div>
+                    </div>
+                    <div class="stat-chip">
+                        <div class="stat-chip-label">Сабақ</div>
+                        <div class="stat-chip-value">4</div>
+                    </div>
+                `;
+            }
+        }
+
+        function switchTab(tab) {
+            document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+
+            const tabMap = {
+                'home': { section: 'homeSection', title: 'Басты бет', index: 0 },
+                'schedule': { section: 'scheduleSection', title: 'Кесте', index: 1 },
+                'grades': { section: 'gradesSection', title: 'Бағалар', index: 2 },
+                'profile': { section: 'profileSection', title: 'Профиль', index: 3 }
+            };
+
+            if (tabMap[tab]) {
+                document.getElementById(tabMap[tab].section).classList.add('active');
+                document.querySelectorAll('.nav-item')[tabMap[tab].index].classList.add('active');
+                document.getElementById('pageTitle').textContent = tabMap[tab].title;
+            }
+        }
+
+        function goToNotifications() {
+            document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            document.getElementById('notificationsSection').classList.add('active');
+            document.getElementById('pageTitle').textContent = 'Хабарландырулар';
+        }
+
+        function goToProfile() {
+            switchTab('profile');
+        }
+
+        // Notifications
+        function renderNotifications() {
+            const container = document.getElementById('notificationsList');
+            if (notifications.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-bell-slash"></i>
+                        <div>Хабарландырулар жоқ</div>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = notifications.map(notif => `
+                <div class="notification-item ${notif.read ? 'read' : 'unread'}" onclick="markAsRead(${notif.id})">
+                    <div class="notification-icon ${notif.type}">
+                        <i class="fas fa-${notif.type === 'grade' ? 'star' : notif.type === 'schedule' ? 'clock' : 'exclamation-triangle'}"></i>
+                    </div>
+                    <div class="notification-content">
+                        <div class="notification-title">${notif.title}</div>
+                        <div class="notification-text">${notif.text}</div>
+                        <div class="notification-time">${notif.time}</div>
+                    </div>
+                    <i class="fas fa-times notification-delete" onclick="deleteNotification(event, ${notif.id})"></i>
+                </div>
+            `).join('');
+        }
+
+        function markAsRead(id) {
+            const notif = notifications.find(n => n.id === id);
+            if (notif) {
+                notif.read = true;
+                renderNotifications();
+                updateNotificationBadge();
+            }
+        }
+
+        function markAllAsRead() {
+            notifications.forEach(n => n.read = true);
+            renderNotifications();
+            updateNotificationBadge();
+        }
+
+        function deleteNotification(event, id) {
+            event.stopPropagation();
+            notifications = notifications.filter(n => n.id !== id);
+            renderNotifications();
+            updateNotificationBadge();
+        }
+
+        function updateNotificationBadge() {
+            const unread = notifications.filter(n => !n.read).length;
+            const badge = document.getElementById('notifBadge');
+            if (unread > 0) {
+                badge.textContent = unread;
+                badge.classList.remove('hidden');
+            } else {
+                badge.classList.add('hidden');
+            }
+        }
+
+        // Teacher Functions
+        function loadGrades() {
+            if (currentUser.role === 'student') return;
+            
+            const tbody = document.getElementById('gradeTableBody');
+            const group = document.getElementById('gradeGroupSelect').value;
+            
+            const groupStudents = students.filter(s => s.group === group);
+            
+            tbody.innerHTML = groupStudents.map(student => {
+                const total = Math.round((student.attendance * 0.3) + (student.szh * 0.2) + (student.ab * 0.2) + (student.final * 0.3));
+                return `
+                    <tr>
+                        <td><strong>${student.name}</strong></td>
+                        <td><input type="number" class="grade-input-small" value="${student.attendance}" max="30" onchange="updateStudentGrade(${student.id}, 'attendance', this.value)"></td>
+                        <td><input type="number" class="grade-input-small" value="${student.szh}" max="20" onchange="updateStudentGrade(${student.id}, 'szh', this.value)"></td>
+                        <td><input type="number" class="grade-input-small" value="${student.ab}" max="20" onchange="updateStudentGrade(${student.id}, 'ab', this.value)"></td>
+                        <td><input type="number" class="grade-input-small" value="${student.final}" max="30" onchange="updateStudentGrade(${student.id}, 'final', this.value)"></td>
+                        <td class="total-grade" id="total-${student.id}">${total}</td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function updateStudentGrade(id, type, value) {
+            const student = students.find(s => s.id === id);
+            if (student) {
+                student[type] = parseInt(value) || 0;
+                const total = Math.round((student.attendance * 0.3) + (student.szh * 0.2) + (student.ab * 0.2) + (student.final * 0.3));
+                document.getElementById(`total-${id}`).textContent = total;
+            }
+        }
+
+        function saveGrades() {
+            alert('Бағалар сақталды! ✅');
+            // Add notification for students
+            notifications.unshift({
+                id: Date.now(),
+                type: 'grade',
+                title: 'Баға жаңартылды',
+                text: `${document.getElementById('gradeSubjectSelect').value} пәнінен жаңа бағалар қойылды`,
+                time: 'Только что',
+                read: false
+            });
+            updateNotificationBadge();
+        }
+
+        function renderAttendance() {
+            const container = document.getElementById('attendanceList');
+            container.innerHTML = students.map(student => `
+                <div class="attendance-item">
+                    <div>
+                        <div class="attendance-name">${student.name}</div>
+                        <div class="attendance-group">${student.group}</div>
+                    </div>
+                    <div class="attendance-toggle">
+                        <button class="toggle-btn present ${Math.random() > 0.2 ? 'active' : ''}" onclick="toggleAttendance(this)">
+                            <i class="fas fa-check"></i> Бар
+                        </button>
+                        <button class="toggle-btn absent ${Math.random() > 0.8 ? 'active' : ''}" onclick="toggleAttendance(this)">
+                            <i class="fas fa-times"></i> Жоқ
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function toggleAttendance(btn) {
+            const parent = btn.parentElement;
+            parent.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+        }
+
+        function saveAttendance() {
+            alert('Қатысу тіркелді! ✅');
+        }
+
+        function renderSchedule() {
+            const container = document.getElementById('scheduleList');
+            container.innerHTML = `
+                <div class="schedule-item">
+                    <div class="time-column">
+                        <div class="time-start">09:00</div>
+                        <div class="time-line"></div>
+                        <div class="time-end">10:30</div>
+                    </div>
+                    <div class="schedule-content">
+                        <div class="subject-name">Web-программалау</div>
+                        <div class="subject-room">
+                            <i class="fas fa-map-marker-alt"></i>
+                            305 каб., А корпус
+                        </div>
+                        <div style="font-size: 13px; color: var(--text-secondary);">
+                            <i class="fas fa-user-tie" style="margin-right: 6px;"></i>
+                            ${currentUser.name}
+                        </div>
+                    </div>
+                </div>
+                <div class="schedule-item">
+                    <div class="time-column">
+                        <div class="time-start">10:45</div>
+                        <div class="time-line"></div>
+                        <div class="time-end">12:15</div>
+                    </div>
+                    <div class="schedule-content">
+                        <div class="subject-name">Мәліметтер базасы</div>
+                        <div class="subject-room">
+                            <i class="fas fa-map-marker-alt"></i>
+                            412 каб., B корпус
+                        </div>
+                        <div style="font-size: 13px; color: var(--text-secondary);">
+                            <i class="fas fa-user-tie" style="margin-right: 6px;"></i>
+                            ${currentUser.name}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function openGradeEntry() {
+            switchTab('grades');
+        }
+
+        function openAttendance() {
+            document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            document.getElementById('attendanceSection').classList.add('active');
+            document.getElementById('pageTitle').textContent = 'Қатысу';
+        }
+
+        function openScheduleEdit() {
+            showModal('Сабақ қосу', 'Мұнда жаңа сабақ қосу формасы болады.\\n\\nПән: Web-программалау\\nУақыт: 09:00 - 10:30\\nКабинет: 305\\nТоп: IT-231');
+        }
+
+        function showStats() {
+            showModal('Топ статистикасы', 'IT-231 топ:\\n\\nОрташа GPA: 3.65\\nҚатысу: 94%\\nТөмен GPA: 2 студент\\nАртықшылық: 5 студент');
+        }
+
+        // Modal
+        function showModal(title, content) {
+            document.getElementById('modalTitle').textContent = title;
+            document.getElementById('modalBody').innerHTML = content.replace(/\\n/g, '<br>');
+            document.getElementById('modal').classList.add('show');
+        }
+
+        function closeModal(event) {
+            if (!event || event.target.id === 'modal') {
+                document.getElementById('modal').classList.remove('show');
+            }
+        }
+
+        function logout() {
+            if (confirm('Жүйеден шыққыңыз келе ме?')) {
+                localStorage.removeItem('narxoz_current_user');
+                location.reload();
+            }
+        }
+    </script>
+</body>
+</html>
